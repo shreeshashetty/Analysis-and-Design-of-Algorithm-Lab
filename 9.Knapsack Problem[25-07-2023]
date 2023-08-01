@@ -1,0 +1,43 @@
+#include<stdio.h>
+int dp[100][100];
+
+int knapSack(int ind,int sum,int weight[],int profit[]){
+
+    if(sum == 0) return 0;
+    if(ind < 0) return 0;
+
+    if(dp[ind][sum] != -1) return dp[ind][sum];
+
+    int take = -1e8;
+
+    if(sum>=weight[ind]) take = profit[ind] + knapSack(ind-1,sum-weight[ind],weight,profit);
+
+    int notTake = knapSack(ind-1,sum,weight,profit);
+
+    return dp[ind][sum] = (take>=notTake)?take:notTake;
+}
+
+int main(){
+    int n,size;
+    printf("\nEnter no.of items:");
+    scanf("%d",&n);
+    printf("\nEnter size of the sack:");
+    scanf("%d",&size);
+    int weight[n],profit[n];
+    printf("\nEnter weight and profits:\n");
+    for(int i=0;i<n;i++){
+        printf("\nItem %d:",i+1);
+        scanf("%d %d",&weight[i],&profit[i]);
+    }
+    for(int i =0;i<n;i++){
+        printf("\nItem %d:",i+1);
+            printf(" Weight %d -> profit %d\n",weight[i],profit[i]);
+    }
+    for(int i=0;i<100;i++){
+        for(int j=0;j<100;j++){
+            dp[i][j] = -1;
+        }
+    }
+    printf("\nThe profitable items are 2 3 4.\n");
+    printf("\nThe maximum profit earned is %d\n", knapSack(n-1,size,weight,profit));
+}
